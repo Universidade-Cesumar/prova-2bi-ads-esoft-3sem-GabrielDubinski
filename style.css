@@ -1,0 +1,131 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background: #0d1117;
+    color: #e6edf3;
+}
+
+h1 {
+    color: #58a6ff;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #161b22;
+    padding: 25px;
+    border-radius: 16px;
+    border: 1px solid #30363d;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+form {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+input {
+    padding: 12px;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    flex: 1;
+    min-width: 200px;
+    background: #0d1117;
+    color: #e6edf3;
+    transition: 0.3s;
+}
+
+input:focus {
+    outline: none;
+    border-color: #58a6ff;
+    box-shadow: 0 0 10px rgba(88, 166, 255, 0.4);
+}
+
+input::placeholder {
+    color: #8b949e;
+}
+
+button {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #238636, #2ea043);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #2ea043, #3fb950);
+    box-shadow: 0 4px 15px rgba(46, 160, 67, 0.4);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+th,
+td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #30363d;
+}
+
+th {
+    background: #21262d;
+    color: #58a6ff;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+td {
+    background: #161b22;
+}
+
+tr:hover td {
+    background: #21262d;
+    transition: 0.3s;
+}
+
+.delete-btn {
+    background: linear-gradient(135deg, #da3633, #f85149);
+    padding: 8px 14px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.delete-btn:hover {
+    background: linear-gradient(135deg, #f85149, #ff6b6b);
+    transform: scale(1.05);
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #161b22;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #30363d;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #58a6ff;
+}
