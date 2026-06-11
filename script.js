@@ -1,70 +1,79 @@
-const materiais = [];
+const form = document.getElementById("form-cadastro");
+const inputNome = document.getElementById("input-nome");
+const inputQuantidade = document.getElementById("input-quantidade");
+const tbody = document.querySelector("#lista-materiais tbody");
 
-const formCadastro = document.getElementById('form-cadastro');
-const inputNome = document.getElementById('input-nome');
-const inputQuantidade = document.getElementById('input-quantidade');
-const listaMateriaisBody = document.querySelector('#lista-materiais tbody');
+let materiais = JSON.parse(localStorage.getItem("materiais")) || [];
+let indiceEdicao = null;
 
-function renderizarMateriais() {
-    listaMateriaisBody.innerHTML = '';
+function salvarDados() {
+    localStorage.setItem("materiais", JSON.stringify(materiais));
+}
 
-    materiais.forEach((material, indice) => {
-        const linha = document.createElement('tr');
+function renderizarTabela() {
+    tbody.innerHTML = "";
 
-        const colunaNome = document.createElement('td');
-        colunaNome.textContent = material.nome;
+    materiais.forEach((material, index) => {
+        const tr = document.createElement("tr");
 
-        const colunaQuantidade = document.createElement('td');
-        colunaQuantidade.textContent = material.quantidade;
+        tr.innerHTML = `
+            <td>${material.nome}</td>
+            <td>${material.quantidade}</td>
+            <td>
+                <button onclick="editarMaterial(${index})">✏️ Editar</button>
+                <button onclick="excluirMaterial(${index})">🗑️ Excluir</button>
+            </td>
+        `;
 
-        const colunaAcoes = document.createElement('td');
-        const botaoExcluir = document.createElement('button');
-        botaoExcluir.textContent = 'Excluir';
-        botaoExcluir.className = 'btn-excluir';
-        botaoExcluir.addEventListener('click', () => {
-            excluirMaterial(indice);
-        });
-
-        colunaAcoes.appendChild(botaoExcluir);
-        linha.appendChild(colunaNome);
-        linha.appendChild(colunaQuantidade);
-        linha.appendChild(colunaAcoes);
-        listaMateriaisBody.appendChild(linha);
+        tbody.appendChild(tr);
     });
+
+    salvarDados();
 }
 
-function cadastrarMaterial(nome, quantidade) {
-    const nomeFormatado = nome.trim();
-    if (!nomeFormatado || quantidade < 0 || Number.isNaN(quantidade)) {
-        return;
-    }
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-    const materialExistente = materiais.find((item) => item.nome.toLowerCase() === nomeFormatado.toLowerCase());
-
-    if (materialExistente) {
-        materialExistente.quantidade += quantidade;
-    } else {
-        materiais.push({ nome: nomeFormatado, quantidade });
-    }
-
-    renderizarMateriais();
-}
-
-function excluirMaterial(indice) {
-    materiais.splice(indice, 1);
-    renderizarMateriais();
-}
-
-formCadastro.addEventListener('submit', (evento) => {
-    evento.preventDefault();
-
-    const nome = inputNome.value;
+    const nome = inputNome.value.trim();
     const quantidade = Number(inputQuantidade.value);
 
-    cadastrarMaterial(nome, quantidade);
+    if (!nome) return;
 
-    formCadastro.reset();
-    inputNome.focus();
+    if (indiceEdicao !== null) {
+        materiais[indiceEdicao] = {
+            nome,
+            quantidade
+        };
+
+        indiceEdicao = null;
+        document.getElementById("btn-cadastrar").textContent =
+            "Cadastrar Material";
+    } else {
+        materiais.push({
+            nome,
+            quantidade
+        });
+    }
+
+    form.reset();
+    renderizarTabela();
 });
 
-renderizarMateriais();
+function editarMaterial(index) {
+    inputNome.value = materiais[index].nome;
+    inputQuantidade.value = materiais[index].quantidade;
+
+    indiceEdicao = index;
+
+    document.getElementById("btn-cadastrar").textContent =
+        "Atualizar Material";
+}
+
+function excluirMaterial(index) {
+    if (confirm(`Deseja excluir "${materiais[index].nome}"?`)) {
+        materiais.splice(index, 1);
+        renderizarTabela();
+    }
+}
+
+renderizarTabela();
