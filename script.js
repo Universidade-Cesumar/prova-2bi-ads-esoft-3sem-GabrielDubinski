@@ -1,79 +1,85 @@
+const API_URL = "https://6a2a04b1f59cb8f65f1df4a8.mockapi.io/AMOXIRIFADO/MATERIAS";
+
 const form = document.getElementById("form-cadastro");
 const inputNome = document.getElementById("input-nome");
 const inputQuantidade = document.getElementById("input-quantidade");
 const tbody = document.querySelector("#lista-materiais tbody");
 
-let materiais = JSON.parse(localStorage.getItem("materiais")) || [];
-let indiceEdicao = null;
+let idEdicao = null;
 
-function salvarDados() {
-    localStorage.setItem("materiais", JSON.stringify(materiais));
-}
+async function carregarMateriais() {
+    const resposta = await fetch(API_URL);
+    const materiais = await resposta.json();
 
-function renderizarTabela() {
     tbody.innerHTML = "";
 
-    materiais.forEach((material, index) => {
+    materiais.forEach((material) => {
         const tr = document.createElement("tr");
 
         tr.innerHTML = `
             <td>${material.nome}</td>
             <td>${material.quantidade}</td>
             <td>
-                <button onclick="editarMaterial(${index})">✏️ Editar</button>
-                <button onclick="excluirMaterial(${index})">🗑️ Excluir</button>
+                <button onclick="editarMaterial('${material.id}')">✏️ Editar</button>
+                <button onclick="excluirMaterial('${material.id}')">🗑️ Excluir</button>
             </td>
         `;
 
         tbody.appendChild(tr);
     });
-
-    salvarDados();
 }
 
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const nome = inputNome.value.trim();
-    const quantidade = Number(inputQuantidade.value);
+    const dados = {
+        nome: inputNome.value.trim(),
+        quantidade: Number(inputQuantidade.value)
+    };
 
-    if (!nome) return;
+    if (idEdicao) {
+        await fetch(`${API_URL}/${idEdicao}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dados)
+        });
 
-    if (indiceEdicao !== null) {
-        materiais[indiceEdicao] = {
-            nome,
-            quantidade
-        };
-
-        indiceEdicao = null;
-        document.getElementById("btn-cadastrar").textContent =
-            "Cadastrar Material";
+        idEdicao = null;
+        document.getElementById("btn-cadastrar").textContent = "Cadastrar Material";
     } else {
-        materiais.push({
-            nome,
-            quantidade
+        await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dados)
         });
     }
 
     form.reset();
-    renderizarTabela();
+    carregarMateriais();
 });
 
-function editarMaterial(index) {
-    inputNome.value = materiais[index].nome;
-    inputQuantidade.value = materiais[index].quantidade;
+async function editarMaterial(id) {
+    const resposta = await fetch(`${API_URL}/${id}`);
+    const material = await resposta.json();
 
-    indiceEdicao = index;
+    inputNome.value = material.nome;
+    inputQuantidade.value = material.quantidade;
 
-    document.getElementById("btn-cadastrar").textContent =
-        "Atualizar Material";
+    idEdicao = id;
+
+    document.getElementById("btn-cadastrar").textContent = "Atualizar Material";
 }
 
-function excluirMaterial(index) {
-    if (confirm(`Deseja excluir "${materiais[index].nome}"?`)) {
-        materiais.splice(index, 1);
-        renderizarTabela();
-    }
+async function excluirMaterial(id) {
+    await fetch(`${API_URL}/${id}`, {
+        method: "DELETE"
+    });
+
+    carregarMateriais();
 }
 
-renderizarTabela();
+carregarMateriais();
