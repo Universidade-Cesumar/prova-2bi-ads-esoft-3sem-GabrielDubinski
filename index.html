@@ -11,10 +11,41 @@
 
         <h1>📦 Controle de Almoxarifado</h1>
 
+        <div class="filtros">
+            <input
+                type="text"
+                id="input-busca"
+                placeholder="Pesquisar material..."
+            >
+        </div>
+
+        <h3>
+            Total de itens cadastrados:
+            <span id="total-itens">0</span>
+        </h3>
+
         <form id="form-cadastro">
-            <input type="text" id="input-nome" placeholder="Nome do Material" required>
-            <input type="number" id="input-quantidade" placeholder="Quantidade" min="0" required>
-            <button type="submit" id="btn-cadastrar">Cadastrar Material</button>
+            <input
+                type="text"
+                id="input-nome"
+                placeholder="Nome do Material"
+                required
+            >
+
+            <input
+                type="number"
+                id="input-quantidade"
+                placeholder="Quantidade"
+                min="0"
+                required
+            >
+
+            <button
+                type="submit"
+                id="btn-cadastrar"
+            >
+                Cadastrar Material
+            </button>
         </form>
 
         <h2>Lista de Materiais</h2>

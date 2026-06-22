@@ -3,11 +3,17 @@ const API_URL = "https://6a2a04b1f59cb8f65f1df4a8.mockapi.io/AMOXIRIFADO/MATERIA
 const form = document.getElementById("form-cadastro");
 const inputNome = document.getElementById("input-nome");
 const inputQuantidade = document.getElementById("input-quantidade");
+const inputBusca = document.getElementById("input-busca");
+const totalItens = document.getElementById("total-itens");
 const tbody = document.querySelector("#lista-materiais tbody");
 
 let idEdicao = null;
 
 function validarRetirada(estoqueAtual, quantidadeRetirada) {
+    if (isNaN(quantidadeRetirada)) {
+        return false;
+    }
+
     if (quantidadeRetirada <= 0) {
         return false;
     }
@@ -20,53 +26,76 @@ function validarRetirada(estoqueAtual, quantidadeRetirada) {
 }
 
 async function carregarMateriais() {
-    const resposta = await fetch(API_URL);
-    const materiais = await resposta.json();
+    try {
+        const resposta = await fetch(API_URL);
 
-    tbody.innerHTML = "";
+        if (!resposta.ok) {
+            throw new Error();
+        }
 
-    materiais.forEach((material) => {
-        const tr = document.createElement("tr");
+        const materiais = await resposta.json();
 
-        tr.innerHTML = `
-            <td>${material.nome}</td>
-            <td>${material.quantidade}</td>
-            <td>
-                <input
-                    type="number"
-                    id="input-retirada"
-                    min="1"
-                    placeholder="Qtd"
-                >
-            </td>
-            <td>
-                <button
-                    type="button"
-                    onclick="baixarMaterial('${material.id}', ${material.quantidade}, this)"
-                    class="btn-baixar"
-                >
-                    Baixar
-                </button>
+        tbody.innerHTML = "";
 
-                <button
-                    type="button"
-                    onclick="editarMaterial('${material.id}')"
-                >
-                    Editar
-                </button>
+        totalItens.textContent = materiais.length;
 
-                <button
-                    type="button"
-                    onclick="excluirMaterial('${material.id}')"
-                    class="btn-excluir"
-                >
-                    Excluir
-                </button>
-            </td>
-        `;
+        const termoBusca = inputBusca.value.toLowerCase();
 
-        tbody.appendChild(tr);
-    });
+        materiais
+            .filter(material =>
+                material.nome.toLowerCase().includes(termoBusca)
+            )
+            .forEach((material) => {
+
+                const tr = document.createElement("tr");
+
+                if (Number(material.quantidade) < 10) {
+                    tr.classList.add("estoque-critico");
+                }
+
+                tr.innerHTML = `
+                    <td>${material.nome}</td>
+                    <td>${material.quantidade}</td>
+                    <td>
+                        <input
+                            type="number"
+                            id="input-retirada"
+                            min="1"
+                            placeholder="Qtd"
+                        >
+                    </td>
+                    <td>
+                        <button
+                            type="button"
+                            onclick="baixarMaterial('${material.id}', ${material.quantidade}, this)"
+                            class="btn-baixar"
+                        >
+                            Baixar
+                        </button>
+
+                        <button
+                            type="button"
+                            onclick="editarMaterial('${material.id}')"
+                        >
+                            Editar
+                        </button>
+
+                        <button
+                            type="button"
+                            onclick="excluirMaterial('${material.id}')"
+                            class="btn-excluir"
+                        >
+                            Excluir
+                        </button>
+                    </td>
+                `;
+
+                tbody.appendChild(tr);
+            });
+
+    } catch {
+        alert("Erro ao conectar com a API. Verifique sua conexão com a internet.");
+    }
 }
 
 form.addEventListener("submit", async (e) => {
@@ -77,49 +106,64 @@ form.addEventListener("submit", async (e) => {
         quantidade: Number(inputQuantidade.value)
     };
 
-    if (idEdicao) {
-        await fetch(`${API_URL}/${idEdicao}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dados)
-        });
+    try {
+        if (idEdicao) {
+            await fetch(`${API_URL}/${idEdicao}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dados)
+            });
 
-        idEdicao = null;
-        document.getElementById("btn-cadastrar").textContent = "Cadastrar Material";
-    } else {
-        await fetch(API_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dados)
-        });
+            idEdicao = null;
+            document.getElementById("btn-cadastrar").textContent = "Cadastrar Material";
+        } else {
+            await fetch(API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dados)
+            });
+        }
+
+        form.reset();
+        carregarMateriais();
+
+    } catch {
+        alert("Erro ao salvar material.");
     }
-
-    form.reset();
-    carregarMateriais();
 });
 
 async function editarMaterial(id) {
-    const resposta = await fetch(`${API_URL}/${id}`);
-    const material = await resposta.json();
+    try {
+        const resposta = await fetch(`${API_URL}/${id}`);
+        const material = await resposta.json();
 
-    inputNome.value = material.nome;
-    inputQuantidade.value = material.quantidade;
+        inputNome.value = material.nome;
+        inputQuantidade.value = material.quantidade;
 
-    idEdicao = id;
+        idEdicao = id;
 
-    document.getElementById("btn-cadastrar").textContent = "Atualizar Material";
+        document.getElementById("btn-cadastrar").textContent = "Atualizar Material";
+
+    } catch {
+        alert("Erro ao carregar material.");
+    }
 }
 
 async function excluirMaterial(id) {
-    await fetch(`${API_URL}/${id}`, {
-        method: "DELETE"
-    });
+    try {
+        await fetch(`${API_URL}/${id}`, {
+            method: "DELETE"
+        });
 
-    carregarMateriais();
+        carregarMateriais();
+
+    } catch {
+        alert("Erro ao excluir material.");
+    }
 }
 
 async function baixarMaterial(id, estoqueAtual, botao) {
@@ -130,23 +174,32 @@ async function baixarMaterial(id, estoqueAtual, botao) {
     const quantidadeRetirada = Number(inputRetirada.value);
 
     if (!validarRetirada(estoqueAtual, quantidadeRetirada)) {
-        alert("Quantidade inválida.");
+        alert(
+            `Retirada inválida.\n\nEstoque atual: ${estoqueAtual}\nQuantidade informada: ${quantidadeRetirada}`
+        );
         return;
     }
 
     const novaQuantidade = estoqueAtual - quantidadeRetirada;
 
-    await fetch(`${API_URL}/${id}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            quantidade: novaQuantidade
-        })
-    });
+    try {
+        await fetch(`${API_URL}/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                quantidade: novaQuantidade
+            })
+        });
 
-    carregarMateriais();
+        carregarMateriais();
+
+    } catch {
+        alert("Erro ao atualizar estoque.");
+    }
 }
+
+inputBusca.addEventListener("input", carregarMateriais);
 
 carregarMateriais();
