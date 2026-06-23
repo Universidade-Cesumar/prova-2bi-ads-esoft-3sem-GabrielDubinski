@@ -7,35 +7,43 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
     <div class="container">
 
         <h1>📦 Controle de Almoxarifado</h1>
 
-        <div class="filtros">
-            <input
-                type="text"
-                id="input-busca"
-                placeholder="Pesquisar material..."
-            >
+        <div class="topo-dashboard">
+
+            <div class="filtros">
+                <input
+                    type="text"
+                    id="input-busca"
+                    placeholder="🔍 Pesquisar material..."
+                >
+            </div>
+
+            <div class="dashboard">
+                <h3>
+                    Total de itens cadastrados:
+                    <span id="total-itens">0</span>
+                </h3>
+            </div>
+
         </div>
 
-        <h3>
-            Total de itens cadastrados:
-            <span id="total-itens">0</span>
-        </h3>
-
         <form id="form-cadastro">
+
             <input
                 type="text"
                 id="input-nome"
-                placeholder="Nome do Material"
+                placeholder="📦 Nome do Material"
                 required
             >
 
             <input
                 type="number"
                 id="input-quantidade"
-                placeholder="Quantidade"
+                placeholder="📊 Quantidade"
                 min="0"
                 required
             >
@@ -44,13 +52,15 @@
                 type="submit"
                 id="btn-cadastrar"
             >
-                Cadastrar Material
+                ➕ Cadastrar Material
             </button>
+
         </form>
 
-        <h2>Lista de Materiais</h2>
+        <h2>📋 Lista de Materiais</h2>
 
         <table id="lista-materiais">
+
             <thead>
                 <tr>
                     <th>Nome do Material</th>
@@ -67,5 +77,6 @@
     </div>
 
     <script src="script.js"></script>
+
 </body>
 </html>

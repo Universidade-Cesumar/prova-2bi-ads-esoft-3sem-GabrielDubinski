@@ -183,12 +183,16 @@ async function baixarMaterial(id, estoqueAtual, botao) {
     const novaQuantidade = estoqueAtual - quantidadeRetirada;
 
     try {
+        const resposta = await fetch(`${API_URL}/${id}`);
+        const material = await resposta.json();
+
         await fetch(`${API_URL}/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
+                nome: material.nome,
                 quantidade: novaQuantidade
             })
         });
