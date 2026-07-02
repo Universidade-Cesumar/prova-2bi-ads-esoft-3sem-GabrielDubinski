@@ -9,6 +9,12 @@ const tbody = document.querySelector("#lista-materiais tbody");
 const loadingRow = document.getElementById("loading-row");
 const btnLimpar = document.getElementById("btn-limpar");
 const btnCadastrar = document.getElementById("btn-cadastrar");
+document.getElementById("total-itens").textContent = materiaisFiltrados.length;
+btnCadastrar.disabled = true;
+
+setTimeout(() => {
+    btnCadastrar.disabled = false;
+}, 800);
 
 let idEdicao = null;
 
