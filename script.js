@@ -125,6 +125,9 @@ const dados = {
 };
 
     try {
+    const btnCadastrar = document.getElementById("btn-cadastrar");
+
+btnCadastrar.disabled = true;
         if (idEdicao) {
         const resposta = await fetch(`${API_URL}/${idEdicao}`, {
     method: "PUT",
@@ -155,11 +158,15 @@ if (!resposta.ok) {
         }
 
         form.reset();
-        carregarMateriais();
 
-    } catch {
-     alert("Não foi possível salvar o material.");    }
-});
+btnCadastrar.disabled = false;
+
+carregarMateriais();
+
+catch {
+    btnCadastrar.disabled = false;
+    alert("Não foi possível salvar o material.");
+}
 
 async function editarMaterial(id) {
     try {
@@ -200,12 +207,11 @@ alert("Não foi possível excluir o material.");    }
 
 async function baixarMaterial(id, nomeMaterial, estoqueAtual, botao)
     const linha = botao.closest("tr");
+const inputRetirada = linha.querySelector("#input-retirada");
+const quantidadeRetirada = Number(inputRetirada.value);
+const retiradaValida = validarRetirada(estoqueAtual, quantidadeRetirada);
 
-    const inputRetirada = linha.querySelector("#input-retirada");
-
-    const quantidadeRetirada = Number(inputRetirada.value);
-
-    if (!validarRetirada(estoqueAtual, quantidadeRetirada)) {
+if (!retiradaValida) {
         alert(
             `Retirada inválida.\n\nEstoque atual: ${estoqueAtual}\nQuantidade informada: ${quantidadeRetirada}`
         );

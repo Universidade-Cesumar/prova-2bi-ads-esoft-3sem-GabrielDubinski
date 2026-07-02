@@ -188,19 +188,22 @@ tbody tr:hover td {
 }
 
 #input-retirada {
-    width: 90px;
+    width: 85px;
     padding: 10px;
-    background: #111;
-    border: 1px solid #d4af37;
-    border-radius: 8px;
-    color: #ffd700;
+    background: #101010;
+    border: 1px solid #ff3333;
+    border-radius: 10px;
+    color: #ffffff;
     text-align: center;
+    font-size: 15px;
+    transition: all .3s ease;
 }
 
 #input-retirada:focus {
     outline: none;
+    border-color: #ff0000;
+    box-shadow: 0 0 10px rgba(255, 0, 0, .30);
 }
-
 td:last-child {
     display: flex;
     justify-content: center;
