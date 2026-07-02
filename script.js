@@ -18,7 +18,7 @@ setTimeout(() => {
 
 let idEdicao = null;
 
-
+inputBusca.value = "";
 
 function destacarTexto(texto, termo) {
     if (!termo) return texto;
