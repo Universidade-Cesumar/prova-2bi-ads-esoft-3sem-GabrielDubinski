@@ -207,9 +207,14 @@ tbody tr:hover td {
 td:last-child {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
+td:last-child button {
+    min-width: 90px;
+}
 .btn-baixar {
     background: #008c4a;
     color: #fff;
