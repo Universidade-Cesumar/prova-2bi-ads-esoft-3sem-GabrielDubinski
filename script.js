@@ -155,8 +155,13 @@ const dados = {
 
 async function editarMaterial(id) {
     try {
-        const resposta = await fetch(`${API_URL}/${id}`);
-        const material = await resposta.json();
+       const resposta = await fetch(`${API_URL}/${id}`);
+
+if (!resposta.ok) {
+    throw new Error();
+}
+
+const material = await resposta.json();
 
         inputNome.value = material.nome;
         inputQuantidade.value = material.quantidade;
