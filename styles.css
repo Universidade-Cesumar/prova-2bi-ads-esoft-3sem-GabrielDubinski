@@ -187,6 +187,10 @@ tbody tr:hover td {
     color: #ff4d4d;
 }
 
+tbody tr {
+    animation: fadeInRow .25s ease;
+}
+
 #input-retirada {
     width: 85px;
     padding: 10px;
@@ -263,9 +267,15 @@ td:last-child button {
     transform: translateY(-2px);
 }
 .estoque-critico td {
-    background: rgba(255, 0, 0, 0.15) !important;
-    color: #ff6b6b;
+    background: rgba(255, 0, 0, 0.25) !important;
+    color: #ff4d4d;
     font-weight: bold;
+    border-top: 1px solid rgba(255, 0, 0, 0.4);
+    border-bottom: 1px solid rgba(255, 0, 0, 0.4);
+}
+
+.estoque-critico:hover td {
+    background: rgba(255, 0, 0, 0.35) !important;
 }
 
 @media (max-width: 900px) {
@@ -296,4 +306,17 @@ td:last-child button {
     h1 {
         font-size: 2rem;
     }
+
+    @keyframes fadeInRow {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
+
+}
+
