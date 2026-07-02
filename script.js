@@ -9,79 +9,62 @@ const tbody = document.querySelector("#lista-materiais tbody");
 const loadingRow = document.getElementById("loading-row");
 const btnLimpar = document.getElementById("btn-limpar");
 const btnCadastrar = document.getElementById("btn-cadastrar");
-document.getElementById("total-itens").textContent = materiaisFiltrados.length;
-btnCadastrar.disabled = true;
-
-setTimeout(() => {
-    btnCadastrar.disabled = false;
-}, 800);
 
 let idEdicao = null;
+let timeoutBusca = null;
 
-inputBusca.value = "";
-
-function destacarTexto(texto, termo) {
-    if (!termo) return texto;
-
-    const regex = new RegExp(`(${termo})`, "gi");
-
-    return texto.replace(regex, `<span class="highlight">$1</span>`);
-}
-
-function mostrarErro(mensagem) {
-    alert(mensagem);
+function mostrarErro(msg) {
+    alert(msg);
 }
 
 function atualizarLista() {
     carregarMateriais();
 }
 
-function validarRetirada(estoqueAtual, quantidadeRetirada) {
-    if (!Number.isInteger(quantidadeRetirada)) return false;
-    if (quantidadeRetirada <= 0) return false;
-    if (quantidadeRetirada > estoqueAtual) return false;
+function validarRetirada(estoqueAtual, qtd) {
+    if (!Number.isInteger(qtd)) return false;
+    if (qtd <= 0) return false;
+    if (qtd > estoqueAtual) return false;
     return true;
 }
 
-
-let timeoutBusca = null;
-
 function debounceBusca(callback, delay = 400) {
     clearTimeout(timeoutBusca);
-
-    timeoutBusca = setTimeout(() => {
-        callback();
-    }, delay);
+    timeoutBusca = setTimeout(callback, delay);
 }
+
+function destacarTexto(texto, termo) {
+    if (!termo) return texto;
+    const regex = new RegExp(`(${termo})`, "gi");
+    return texto.replace(regex, `<span class="highlight">$1</span>`);
+}
+
 async function carregarMateriais() {
     try {
         loadingRow.style.display = "table-row";
+        tbody.innerHTML = "";
         tbody.style.display = "none";
 
-        const resposta = await fetch(API_URL);
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error();
 
-        if (!resposta.ok) throw new Error();
-
-        const materiais = await resposta.json();
-
-        tbody.innerHTML = "";
-        totalItens.textContent = materiais.length;
+        const materiais = await res.json();
 
         const termoBusca = inputBusca.value.trim().toLowerCase();
 
-        const materiaisFiltrados = materiais.filter(material =>
-            material.nome.toLowerCase().includes(termoBusca)
+        const filtrados = materiais.filter(m =>
+            m.nome.toLowerCase().includes(termoBusca)
         );
+
+        totalItens.textContent = filtrados.length;
 
         const linhaVazia = document.getElementById("linha-vazia");
 
-        if (materiaisFiltrados.length === 0 && linhaVazia) {
-            linhaVazia.style.display = "table-row";
-        } else if (linhaVazia) {
-            linhaVazia.style.display = "none";
+        if (linhaVazia) {
+            linhaVazia.style.display = filtrados.length === 0 ? "table-row" : "none";
         }
 
-        materiaisFiltrados.forEach((material) => {
+        filtrados.forEach(material => {
             const tr = document.createElement("tr");
 
             if (Number(material.quantidade) < 10) {
@@ -89,32 +72,24 @@ async function carregarMateriais() {
             }
 
             tr.innerHTML = `
-                <td>${material.nome}</td>
+                <td>${destacarTexto(material.nome, termoBusca)}</td>
                 <td>${material.quantidade}</td>
                 <td>
-
-                inputRetirada.addEventListener("input", (e) => {
-    if (e.target.value < 0) e.target.value = 0;
-});
-                    <input type="number" id="input-retirada" min="1" placeholder="Qtd">
+                    <input type="number" class="input-retirada" min="1" placeholder="Qtd">
                 </td>
                 <td>
-                    <button type="button"
-                        onclick="baixarMaterial('${material.id}', '${material.nome}', ${material.quantidade}, this)"
-                        class="btn-baixar">
+                    <button type="button" class="btn-baixar"
+                        onclick="baixarMaterial('${material.id}', '${material.nome}', ${material.quantidade}, this)">
                         Baixar
                     </button>
 
-                    <button type="button"
-                        onclick="editarMaterial('${material.id}')"
-                        class="btn-editar">
+                    <button type="button" class="btn-editar"
+                        onclick="editarMaterial('${material.id}')">
                         Editar
                     </button>
 
-                    <button type="button"
-                        onclick="excluirMaterial('${material.id}')"
-                        class="btn-excluir">
-                        botao.disabled = false;
+                    <button type="button" class="btn-excluir"
+                        onclick="excluirMaterial('${material.id}')">
                         Excluir
                     </button>
                 </td>
@@ -127,10 +102,10 @@ async function carregarMateriais() {
         tbody.style.display = "table-row-group";
 
     } catch (error) {
+        loadingRow.style.display = "none";
         tbody.innerHTML = "";
         totalItens.textContent = "0";
-        loadingRow.style.display = "none";
-        mostrarErro("Erro ao carregar materiais. Verifique sua conexão.");
+        mostrarErro("Erro ao carregar materiais.");
     }
 }
 
@@ -140,15 +115,8 @@ form.addEventListener("submit", async (e) => {
     const nome = inputNome.value.trim();
     const quantidade = Number(inputQuantidade.value);
 
-    if (nome === "") {
-        inputNome.classList.add("input-erro");
-        return mostrarErro("Informe o nome do material.");
-    }
-
-    if (isNaN(quantidade) || quantidade < 0) {
-        inputQuantidade.classList.add("input-erro");
-        return mostrarErro("Informe uma quantidade válida.");
-    }
+    if (!nome) return mostrarErro("Informe o nome.");
+    if (isNaN(quantidade) || quantidade < 0) return mostrarErro("Quantidade inválida.");
 
     const dados = { nome, quantidade };
 
@@ -156,43 +124,36 @@ form.addEventListener("submit", async (e) => {
         btnCadastrar.disabled = true;
 
         if (idEdicao) {
-            const res = await fetch(`${API_URL}/${idEdicao}`, {
+            await fetch(`${API_URL}/${idEdicao}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(dados)
             });
 
-            if (!res.ok) throw new Error();
-
             idEdicao = null;
             btnCadastrar.textContent = "Cadastrar Material";
 
         } else {
-            const res = await fetch(API_URL, {
+            await fetch(API_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(dados)
             });
-
-            if (!res.ok) throw new Error();
         }
 
         form.reset();
         btnCadastrar.disabled = false;
-
         atualizarLista();
 
-    } catch (error) {
+    } catch {
         btnCadastrar.disabled = false;
-        mostrarErro("Não foi possível salvar o material.");
+        mostrarErro("Erro ao salvar.");
     }
 });
 
 async function editarMaterial(id) {
     try {
         const res = await fetch(`${API_URL}/${id}`);
-        if (!res.ok) throw new Error();
-
         const material = await res.json();
 
         inputNome.value = material.nome;
@@ -205,49 +166,39 @@ async function editarMaterial(id) {
         btnCadastrar.textContent = "Atualizar Material";
 
     } catch {
-        mostrarErro("Não foi possível carregar o material.");
+        mostrarErro("Erro ao editar.");
     }
 }
 
 async function excluirMaterial(id) {
-    if (!confirm("Tem certeza que deseja excluir?")) return;
+    if (!confirm("Confirmar exclusão?")) return;
 
     try {
-        const res = await fetch(`${API_URL}/${id}`, {
-            method: "DELETE"
-        });
-
-        if (!res.ok) throw new Error();
-
+        await fetch(`${API_URL}/${id}`, { method: "DELETE" });
         atualizarLista();
-
     } catch {
-        mostrarErro("Erro ao excluir material.");
+        mostrarErro("Erro ao excluir.");
     }
 }
 
-async function baixarMaterial(id, nomeMaterial, estoqueAtual, botao) {
-    const linha = botao.closest("tr");
-    const inputRetirada = linha.querySelector(".input-retirada");
-    const quantidadeRetirada = Number(inputRetirada.value);
+async function baixarMaterial(id, nome, estoque, btn) {
+    const linha = btn.closest("tr");
+    const input = linha.querySelector(".input-retirada");
+    const qtd = Number(input.value);
 
-    if (!validarRetirada(estoqueAtual, quantidadeRetirada)) {
+    if (!validarRetirada(estoque, qtd)) {
         return mostrarErro("Retirada inválida.");
     }
 
-    const novaQuantidade = estoqueAtual - quantidadeRetirada;
-
     try {
-        const res = await fetch(`${API_URL}/${id}`, {
+        await fetch(`${API_URL}/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                nome: nomeMaterial,
-                quantidade: novaQuantidade
+                nome,
+                quantidade: estoque - qtd
             })
         });
-
-        if (!res.ok) throw new Error();
 
         atualizarLista();
 
@@ -264,15 +215,9 @@ btnLimpar.addEventListener("click", () => {
     btnCadastrar.textContent = "Cadastrar Material";
 });
 
-inputNome.addEventListener("input", () => {
-    inputNome.classList.remove("input-erro");
-});
+inputNome.addEventListener("input", () => inputNome.classList.remove("input-erro"));
+inputQuantidade.addEventListener("input", () => inputQuantidade.classList.remove("input-erro"));
 
-inputQuantidade.addEventListener("input", () => {
-    inputQuantidade.classList.remove("input-erro");
-});
+inputBusca.addEventListener("input", () => debounceBusca(atualizarLista));
 
-inputBusca.addEventListener("input", () => {
-    debounceBusca(atualizarLista);
-});
 atualizarLista();
