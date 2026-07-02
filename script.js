@@ -98,8 +98,7 @@ onclick="baixarMaterial('${material.id}', '${material.nome}', ${material.quantid
             });
 
     } catch {
-        alert("Erro ao conectar com a API. Verifique sua conexão com a internet.");
-    }
+alert("Não foi possível conectar com o servidor. Verifique sua internet e tente novamente.");    }
 }
 
 form.addEventListener("submit", async (e) => {
@@ -151,8 +150,7 @@ const dados = {
         carregarMateriais();
 
     } catch {
-        alert("Erro ao salvar material.");
-    }
+     alert("Não foi possível salvar o material.");    }
 });
 
 async function editarMaterial(id) {
@@ -168,8 +166,7 @@ async function editarMaterial(id) {
         document.getElementById("btn-cadastrar").textContent = "Atualizar Material";
 
     } catch {
-        alert("Erro ao carregar material.");
-    }
+alert("Não foi possível carregar os dados do material.");    }
 }
 
 async function excluirMaterial(id) {
@@ -181,8 +178,7 @@ async function excluirMaterial(id) {
         carregarMateriais();
 
     } catch {
-        alert("Erro ao excluir material.");
-    }
+alert("Não foi possível excluir o material.");    }
 }
 
 async function baixarMaterial(id, nomeMaterial, estoqueAtual, botao)
@@ -225,7 +221,7 @@ async function baixarMaterial(id, nomeMaterial, estoqueAtual, botao)
         carregarMateriais();
 
     } catch {
-        alert("Erro ao atualizar estoque.");
+      alert("Não foi possível atualizar o estoque.");
     }
 }
 
