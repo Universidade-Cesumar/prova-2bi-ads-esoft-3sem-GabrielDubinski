@@ -108,6 +108,7 @@ async function carregarMateriais() {
                     <button type="button"
                         onclick="excluirMaterial('${material.id}')"
                         class="btn-excluir">
+                        botao.disabled = false;
                         Excluir
                     </button>
                 </td>
