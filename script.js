@@ -126,24 +126,32 @@ const dados = {
 
     try {
         if (idEdicao) {
-            await fetch(`${API_URL}/${idEdicao}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(dados)
-            });
+        const resposta = await fetch(`${API_URL}/${idEdicao}`, {
+    method: "PUT",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(dados)
+});
 
-            idEdicao = null;
+if (!resposta.ok) {
+    throw new Error();
+}
+
+idEdicao = null;
             document.getElementById("btn-cadastrar").textContent = "Cadastrar Material";
         } else {
-            await fetch(API_URL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(dados)
-            });
+            const resposta = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(dados)
+});
+
+if (!resposta.ok) {
+    throw new Error();
+}
         }
 
         form.reset();
