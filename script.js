@@ -217,7 +217,7 @@ async function excluirMaterial(id) {
 
 async function baixarMaterial(id, nomeMaterial, estoqueAtual, botao) {
     const linha = botao.closest("tr");
-    const inputRetirada = linha.querySelector("#input-retirada");
+    const inputRetirada = linha.querySelector(".input-retirada");
     const quantidadeRetirada = Number(inputRetirada.value);
 
     if (!validarRetirada(estoqueAtual, quantidadeRetirada)) {
