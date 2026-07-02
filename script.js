@@ -46,6 +46,7 @@ const materiaisFiltrados = materiais.filter(material =>
     material.nome.toLowerCase().includes(termoBusca)
 );
 
+inputBusca.value = "";
 materiaisFiltrados
             .forEach((material) => {
 
