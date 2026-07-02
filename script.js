@@ -122,17 +122,18 @@ form.addEventListener("submit", async (e) => {
 const quantidade = Number(inputQuantidade.value);
 
 if (nome === "") {
+    inputNome.classList.add("input-erro");
     alert("Informe o nome do material.");
     inputNome.focus();
     return;
 }
 
 if (isNaN(quantidade) || quantidade < 0) {
+    inputQuantidade.classList.add("input-erro");
     alert("Informe uma quantidade válida.");
     inputQuantidade.focus();
     return;
 }
-
 const dados = {
     nome,
     quantidade
@@ -276,5 +277,13 @@ if (!retiradaValida) {
 }
 
 inputBusca.addEventListener("input", carregarMateriais);
+
+inputNome.addEventListener("input", () => {
+    inputNome.classList.remove("input-erro");
+});
+
+inputQuantidade.addEventListener("input", () => {
+    inputQuantidade.classList.remove("input-erro");
+});
 
 carregarMateriais();
