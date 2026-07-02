@@ -339,6 +339,25 @@ td:last-child button {
     border: 2px solid #ff0000 !important;
     box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
 }
+
+#btn-limpar {
+    height: 55px;
+    min-width: 180px;
+    background: #1f1f1f;
+    color: #ff0000;
+    border: 1px solid #ff0000;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
 }
+
+#btn-limpar:hover {
+    background: #ff0000;
+    color: #000;
+}
+
+}
+
 }
 

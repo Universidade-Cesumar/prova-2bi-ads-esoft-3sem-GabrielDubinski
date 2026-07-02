@@ -275,7 +275,16 @@ if (!retiradaValida) {
     } catch {
 mostrarErro("Não foi possível atualizar o estoque.");    }
 }
+const btnLimpar = document.getElementById("btn-limpar");
 
+btnLimpar.addEventListener("click", () => {
+    form.reset();
+    inputNome.classList.remove("input-erro");
+    inputQuantidade.classList.remove("input-erro");
+    idEdicao = null;
+
+    document.getElementById("btn-cadastrar").textContent = "Cadastrar Material";
+});
 inputBusca.addEventListener("input", carregarMateriais);
 
 inputNome.addEventListener("input", () => {
