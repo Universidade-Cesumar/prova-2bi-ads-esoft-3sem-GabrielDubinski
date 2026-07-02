@@ -36,7 +36,10 @@ async function carregarMateriais() {
 
         const materiais = await resposta.json();
 
-       tbody.innerHTML = "";
+    tbody.style.opacity = "0.4";
+    tbody.innerHTML = "";
+
+    tbody.style.opacity = "1";
 
 const termoBusca = inputBusca.value.trim().toLowerCase();
 
@@ -106,8 +109,11 @@ onclick="baixarMaterial('${material.id}', '${material.nome}', ${material.quantid
                 tbody.appendChild(tr);
             });
 
-    } catch {
-alert("Não foi possível conectar com o servidor. Verifique sua internet e tente novamente.");    }
+   } catch (error) {
+    tbody.innerHTML = "";
+    totalItens.textContent = "0";
+
+    alert("Erro ao carregar materiais. Verifique sua conexão e tente novamente.");
 }
 
 form.addEventListener("submit", async (e) => {
@@ -199,7 +205,13 @@ alert("Não foi possível carregar os dados do material.");    }
 }
 
 async function excluirMaterial(id) {
-    try {
+    const confirmacao = confirm("Tem certeza que deseja excluir este material?");
+
+if (!confirmacao) {
+    return;
+}    
+
+try {
        const resposta = await fetch(`${API_URL}/${id}`, {
     method: "DELETE"
 });
