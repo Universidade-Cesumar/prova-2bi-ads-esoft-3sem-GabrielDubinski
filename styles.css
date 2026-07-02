@@ -36,22 +36,28 @@ h1 {
 }
 
 .dashboard {
-    background: #181818;
-    border: 1px solid #d4af37;
-    border-radius: 15px;
-    padding: 20px;
+    background: #141414;
+    border: 1px solid #ff3333;
+    border-radius: 16px;
+    padding: 25px;
     text-align: center;
+    transition: all .3s ease;
 }
 
 .dashboard h3 {
-    color: #d4af37;
+    color: #ffffff;
     font-size: 1.2rem;
+    font-weight: 500;
 }
 
 #total-itens {
-    color: #ffd700;
-    font-size: 2rem;
+    color: #ff3333;
+    font-size: 2.4rem;
     font-weight: bold;
+}
+
+.dashboard:hover {
+    box-shadow: 0 0 20px rgba(255, 0, 0, .20);
 }
 
 #input-busca {
