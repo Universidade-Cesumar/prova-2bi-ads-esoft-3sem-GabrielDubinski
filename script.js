@@ -176,8 +176,14 @@ if (!resposta.ok) {
 
 btnCadastrar.disabled = false;
 
+const valorRetirado = quantidadeRetirada;
+
 carregarMateriais();
 
+setTimeout(() => {
+    const inputs = document.querySelectorAll("#input-retirada");
+    inputs.forEach(input => input.value = "");
+}, 50);
 catch {
     btnCadastrar.disabled = false;
     alert("Não foi possível salvar o material.");
