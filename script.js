@@ -86,6 +86,10 @@ async function carregarMateriais() {
                 <td>${material.nome}</td>
                 <td>${material.quantidade}</td>
                 <td>
+
+                inputRetirada.addEventListener("input", (e) => {
+    if (e.target.value < 0) e.target.value = 0;
+});
                     <input type="number" id="input-retirada" min="1" placeholder="Qtd">
                 </td>
                 <td>
