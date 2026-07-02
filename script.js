@@ -9,7 +9,11 @@ const tbody = document.querySelector("#lista-materiais tbody");
 
 let idEdicao = null;
 
-function mostrarErro(mensagem) {
+
+
+functionfunction atualizarLista() {
+    carregarMateriais();
+} mostrarErro(mensagem) {
     alert(mensagem);
 }
 function validarRetirada(estoqueAtual, quantidadeRetirada) {
@@ -180,7 +184,7 @@ btnCadastrar.disabled = false;
 
 const valorRetirado = quantidadeRetirada;
 
-carregarMateriais();
+atualizarLista();
 
 setTimeout(() => {
     const inputs = document.querySelectorAll("#input-retirada");
@@ -230,7 +234,7 @@ if (!resposta.ok) {
     throw new Error();
 }
 
-carregarMateriais();
+atualizarLista();
 
     } catch {
 mostrarErro("Não foi possível excluir o material.");}
@@ -283,6 +287,9 @@ btnLimpar.addEventListener("click", () => {
     inputNome.classList.remove("input-erro");
     inputQuantidade.classList.remove("input-erro");
     idEdicao = null;
+
+    inputNome.classList.remove("modo-edicao");
+inputQuantidade.classList.remove("modo-edicao");
 
     document.getElementById("btn-cadastrar").textContent = "Cadastrar Material";
 });
