@@ -61,7 +61,7 @@ tr.innerHTML = ` `
                     <td>
                         <input
                             type="number"
-                            id="input-retirada"
+                            id="inpFut-retirada"
                             min="1"
                             placeholder="Qtd"
                         >
@@ -69,8 +69,7 @@ tr.innerHTML = ` `
                     <td>
                         <button
                             type="button"
-                            onclick="baixarMaterial('${material.id}', ${material.quantidade}, this)"
-                            class="btn-baixar"
+onclick="baixarMaterial('${material.id}', '${material.nome}', ${material.quantidade}, this)"                            class="btn-baixar"
                         >
                             Baixar
                         </button>
@@ -171,7 +170,7 @@ async function excluirMaterial(id) {
     }
 }
 
-async function baixarMaterial(id, estoqueAtual, botao) {
+async function baixarMaterial(id, nomeMaterial, estoqueAtual, botao)
     const linha = botao.closest("tr");
 
     const inputRetirada = linha.querySelector("#input-retirada");
@@ -188,10 +187,16 @@ async function baixarMaterial(id, estoqueAtual, botao) {
     const novaQuantidade = estoqueAtual - quantidadeRetirada;
 
     try {
-        const resposta = await fetch(`${API_URL}/${id}`);
-        const material = await resposta.json();
-
-        await fetch(`${API_URL}/${id}`, {
+       await fetch(`${API_URL}/${id}`, {
+    method: "PUT",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        nome: nomeMaterial,
+        quantidade: novaQuantidade
+    })
+});
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
