@@ -10,6 +10,7 @@ const tbody = document.querySelector("#lista-materiais tbody");
 let idEdicao = null;
 
 function validarRetirada(estoqueAtual, quantidadeRetirada) {
+
     if (isNaN(quantidadeRetirada)) {
         return false;
     }
