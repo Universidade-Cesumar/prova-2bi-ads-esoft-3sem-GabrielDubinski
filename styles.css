@@ -167,11 +167,11 @@ thead th:last-child {
 }
 
 tbody td {
-    background: #181818;
-    padding: 18px;
+    background: #1b1b1b;
+    padding: 16px;
     text-align: center;
-    color: #f2f2f2;
-    transition: .3s;
+    color: #d4af37;
+    min-width: 120px;
 }
 
 tbody td:first-child {
@@ -299,9 +299,12 @@ td:last-child button {
     }
 
     table {
-        display: block;
-        overflow-x: auto;
-    }
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    overflow-x: auto;
+    display: block;
+}
 
     h1 {
         font-size: 2rem;
