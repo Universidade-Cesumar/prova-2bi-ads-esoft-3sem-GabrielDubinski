@@ -37,23 +37,24 @@ h1 {
 
 .dashboard {
     background: #141414;
-    border: 1px solid #ff3333;
-    border-radius: 16px;
-    padding: 25px;
+    border: 1px solid #ff0000;
+    border-radius: 15px;
+    padding: 22px;
     text-align: center;
-    transition: all .3s ease;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.15);
 }
 
 .dashboard h3 {
     color: #ffffff;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 500;
 }
 
 #total-itens {
-    color: #ff3333;
+    color: #ff0000;
     font-size: 2.4rem;
     font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
 }
 
 .dashboard:hover {
@@ -321,5 +322,18 @@ td:last-child button {
     }
 }
 
+@media (max-width: 700px) {
+    table {
+        font-size: 14px;
+    }
+
+    td, th {
+        padding: 12px;
+    }
+
+    #input-retirada {
+        width: 70px;
+    }
+}
 }
 
