@@ -1,9 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Controle de Almoxarifado</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
 <body>
 
     <main class="container">
 
-        <!-- Título -->
-        <h1>📦 Controle de Almoxarifado</h1>
+        <!-- Título do sistema -->
+        <header>
+            <h1>📦 Controle de Almoxarifado</h1>
+        </header>
 
         <!-- Dashboard -->
         <section class="topo-dashboard">
@@ -26,33 +41,37 @@
         </section>
 
         <!-- Cadastro -->
-        <form id="form-cadastro">
+        <section>
 
-            <input
-                type="text"
-                id="input-nome"
-                placeholder="📦 Nome do Material"
-                required
-            >
+            <form id="form-cadastro">
 
-            <input
-                type="number"
-                id="input-quantidade"
-                placeholder="📊 Quantidade"
-                min="0"
-                required
-            >
+                <input
+                    type="text"
+                    id="input-nome"
+                    placeholder="📦 Nome do Material"
+                    required
+                >
 
-            <button
-                type="submit"
-                id="btn-cadastrar"
-            >
-                ➕ Cadastrar Material
-            </button>
+                <input
+                    type="number"
+                    id="input-quantidade"
+                    placeholder="📊 Quantidade"
+                    min="0"
+                    required
+                >
 
-        </form>
+                <button
+                    type="submit"
+                    id="btn-cadastrar"
+                >
+                    ➕ Cadastrar Material
+                </button>
 
-        <!-- Lista -->
+            </form>
+
+        </section>
+
+        <!-- Lista de materiais -->
         <section>
 
             <h2>📋 Lista de Materiais</h2>
@@ -76,6 +95,9 @@
 
     </main>
 
+    <!-- JavaScript -->
     <script src="script.js"></script>
 
 </body>
+
+</html>

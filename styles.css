@@ -5,26 +5,25 @@
 }
 
 body {
-    background: #050505;
-    color: #d4af37;
+    background: #000000;
+    color: #ff4d4d;
     font-family: "Segoe UI", sans-serif;
     min-height: 100vh;
     padding: 30px;
 }
-
 .container {
     max-width: 1300px;
     margin: auto;
     background: #111111;
     padding: 40px;
     border-radius: 20px;
-    border: 1px solid #d4af37;
-    box-shadow: 0 0 25px rgba(212, 175, 55, 0.15);
+    border: 1px solid #ff3333;
+    box-shadow: 0 0 25px rgba(255, 0, 0, 0.2);
 }
 
 h1 {
     text-align: center;
-    color: #ffd700;
+    color: #ff3333;
     font-size: 2.8rem;
     margin-bottom: 35px;
 }
@@ -123,7 +122,7 @@ h1 {
 
 h2 {
     text-align: center;
-    color: #ffd700;
+    color: #ff3333;
     font-size: 2rem;
     margin-bottom: 25px;
 }
