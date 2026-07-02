@@ -48,14 +48,14 @@ const materiaisFiltrados = materiais.filter(material =>
 
 materiaisFiltrados
             .forEach((material) => {
+const tr = document.createElement("tr");
+const estoqueBaixo = Number(material.quantidade) < 10;
 
-                const tr = document.createElement("tr");
+if (estoqueBaixo) {
+    tr.classList.add("estoque-critico");
+}
 
-                if (Number(material.quantidade) < 10) {
-                    tr.classList.add("estoque-critico");
-                }
-
-                tr.innerHTML = `
+tr.innerHTML = ` `
                     <td>${material.nome}</td>
                     <td>${material.quantidade}</td>
                     <td>
