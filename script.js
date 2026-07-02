@@ -7,297 +7,241 @@ const inputBusca = document.getElementById("input-busca");
 const totalItens = document.getElementById("total-itens");
 const tbody = document.querySelector("#lista-materiais tbody");
 const loadingRow = document.getElementById("loading-row");
-loadingRow.style.display = "table-row";
-tbody.style.display = "none";
+const btnLimpar = document.getElementById("btn-limpar");
+const btnCadastrar = document.getElementById("btn-cadastrar");
+
 let idEdicao = null;
 
-
-
-functionfunction atualizarLista() {
-    carregarMateriais();
-} mostrarErro(mensagem) {
+function mostrarErro(mensagem) {
     alert(mensagem);
 }
-function validarRetirada(estoqueAtual, quantidadeRetirada) {
 
-   if (!Number.isInteger(quantidadeRetirada)) {
-    return false;
+function atualizarLista() {
+    carregarMateriais();
 }
-    if (quantidadeRetirada <= 0) {
-        return false;
-    }
 
-    if (quantidadeRetirada > estoqueAtual) {
-        return false;
-    }
-
+function validarRetirada(estoqueAtual, quantidadeRetirada) {
+    if (!Number.isInteger(quantidadeRetirada)) return false;
+    if (quantidadeRetirada <= 0) return false;
+    if (quantidadeRetirada > estoqueAtual) return false;
     return true;
 }
 
+
+let timeoutBusca = null;
+
+function debounceBusca(callback, delay = 400) {
+    clearTimeout(timeoutBusca);
+
+    timeoutBusca = setTimeout(() => {
+        callback();
+    }, delay);
+}
 async function carregarMateriais() {
     try {
+        loadingRow.style.display = "table-row";
+        tbody.style.display = "none";
+
         const resposta = await fetch(API_URL);
 
-        if (!resposta.ok) {
-            throw new Error();
-        }
+        if (!resposta.ok) throw new Error();
 
         const materiais = await resposta.json();
 
-    tbody.style.opacity = "0.4";
-    tbody.innerHTML = "";
+        tbody.innerHTML = "";
+        totalItens.textContent = materiais.length;
+
+        const termoBusca = inputBusca.value.trim().toLowerCase();
+
+        const materiaisFiltrados = materiais.filter(material =>
+            material.nome.toLowerCase().includes(termoBusca)
+        );
+
+        const linhaVazia = document.getElementById("linha-vazia");
+
+        if (materiaisFiltrados.length === 0 && linhaVazia) {
+            linhaVazia.style.display = "table-row";
+        } else if (linhaVazia) {
+            linhaVazia.style.display = "none";
+        }
+
+        materiaisFiltrados.forEach((material) => {
+            const tr = document.createElement("tr");
+
+            if (Number(material.quantidade) < 10) {
+                tr.classList.add("estoque-critico");
+            }
+
+            tr.innerHTML = `
+                <td>${material.nome}</td>
+                <td>${material.quantidade}</td>
+                <td>
+                    <input type="number" id="input-retirada" min="1" placeholder="Qtd">
+                </td>
+                <td>
+                    <button type="button"
+                        onclick="baixarMaterial('${material.id}', '${material.nome}', ${material.quantidade}, this)"
+                        class="btn-baixar">
+                        Baixar
+                    </button>
+
+                    <button type="button"
+                        onclick="editarMaterial('${material.id}')"
+                        class="btn-editar">
+                        Editar
+                    </button>
+
+                    <button type="button"
+                        onclick="excluirMaterial('${material.id}')"
+                        class="btn-excluir">
+                        Excluir
+                    </button>
+                </td>
+            `;
+
+            tbody.appendChild(tr);
+        });
+
         loadingRow.style.display = "none";
-tbody.style.display = "table-row-group";
+        tbody.style.display = "table-row-group";
 
-    tbody.style.opacity = "1";
-
-const termoBusca = inputBusca.value.trim().toLowerCase();
-
-totalItens.textContent = materiais.length;
-
-const materiaisFiltrados = materiais.filter(material =>
-    material.nome.toLowerCase().includes(termoBusca)
-);
-
-inputBusca.value = "";
-materiaisFiltrados
-            .forEach((material) => {
-
-                const linhaVazia = document.getElementById("linha-vazia");
-
-if (materiaisFiltrados.length === 0) {
-    linhaVazia.style.display = "table-row";
-} else {
-    linhaVazia.style.display = "none";
+    } catch (error) {
+        tbody.innerHTML = "";
+        totalItens.textContent = "0";
+        loadingRow.style.display = "none";
+        mostrarErro("Erro ao carregar materiais. Verifique sua conexão.");
+    }
 }
-const tr = document.createElement("tr");
-const estoqueBaixo = Number(material.quantidade) < 10;
-
-if (estoqueBaixo) {
-    tr.classList.add("estoque-critico");
-}
-
-tr.innerHTML = ` `
-                    <td>${material.nome}</td>
-                    <td>${material.quantidade}</td>
-                    <td>
-                        <input
-                            type="number"
-                            id="inpFut-retirada"
-                            min="1"
-                            placeholder="Qtd"
-                        >
-                    </td>
-                    <td>
-                        <button
-                            type="button"
-onclick="baixarMaterial('${material.id}', '${material.nome}', ${material.quantidade}, this)"                            class="btn-baixar"
-                        >
-                            Baixar
-                        </button>
-
-                        <button
-    type="button"
-    class="btn-editar"
-    onclick="editarMaterial('${material.id}')"
->
-    ✏️ Editar
-</button>
-                            Editar
-                        </button>
-
-                        <button
-                            type="button"
-                            onclick="excluirMaterial('${material.id}')"
-                            class="btn-excluir"
-                        >
-                            Excluir
-                        </button>
-                    </td>
-                `;
-
-                tbody.appendChild(tr);
-            });
-
-   } catch (error) {
-    tbody.innerHTML = "";
-    totalItens.textContent = "0";
-
-mostrarErro("Erro ao carregar materiais. Verifique sua conexão e tente novamente.");}
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const nome = inputNome.value.trim();
-const quantidade = Number(inputQuantidade.value);
+    const quantidade = Number(inputQuantidade.value);
 
-if (nome === "") {
-    inputNome.classList.add("input-erro");
-    alert("Informe o nome do material.");
-    inputNome.focus();
-    return;
-}
+    if (nome === "") {
+        inputNome.classList.add("input-erro");
+        return mostrarErro("Informe o nome do material.");
+    }
 
-if (isNaN(quantidade) || quantidade < 0) {
-    inputQuantidade.classList.add("input-erro");
-    alert("Informe uma quantidade válida.");
-    inputQuantidade.focus();
-    return;
-}
-const dados = {
-    nome,
-    quantidade
-};
+    if (isNaN(quantidade) || quantidade < 0) {
+        inputQuantidade.classList.add("input-erro");
+        return mostrarErro("Informe uma quantidade válida.");
+    }
+
+    const dados = { nome, quantidade };
 
     try {
-    const btnCadastrar = document.getElementById("btn-cadastrar");
+        btnCadastrar.disabled = true;
 
-btnCadastrar.disabled = true;
         if (idEdicao) {
-        const resposta = await fetch(`${API_URL}/${idEdicao}`, {
-    method: "PUT",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(dados)
-});
+            const res = await fetch(`${API_URL}/${idEdicao}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(dados)
+            });
 
-if (!resposta.ok) {
-    throw new Error();
-}
+            if (!res.ok) throw new Error();
 
-idEdicao = null;
-            document.getElementById("btn-cadastrar").textContent = "Cadastrar Material";
+            idEdicao = null;
+            btnCadastrar.textContent = "Cadastrar Material";
+
         } else {
-            const resposta = await fetch(API_URL, {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(dados)
-});
+            const res = await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(dados)
+            });
 
-if (!resposta.ok) {
-    throw new Error();
-}
+            if (!res.ok) throw new Error();
         }
 
         form.reset();
+        btnCadastrar.disabled = false;
 
-btnCadastrar.disabled = false;
+        atualizarLista();
 
-const valorRetirado = quantidadeRetirada;
-
-atualizarLista();
-
-setTimeout(() => {
-    const inputs = document.querySelectorAll("#input-retirada");
-    inputs.forEach(input => input.value = "");
-}, 50);
-
-catch {
-    btnCadastrar.disabled = false;
-   mostrarErro("Não foi possível salvar o material.");
-}
+    } catch (error) {
+        btnCadastrar.disabled = false;
+        mostrarErro("Não foi possível salvar o material.");
+    }
+});
 
 async function editarMaterial(id) {
     try {
-       const resposta = await fetch(`${API_URL}/${id}`);
+        const res = await fetch(`${API_URL}/${id}`);
+        if (!res.ok) throw new Error();
 
-if (!resposta.ok) {
-    throw new Error();
-}
+        const material = await res.json();
 
-const material = await resposta.json();
-inputNome.value = material.nome;
-inputQuantidade.value = material.quantidade;
+        inputNome.value = material.nome;
+        inputQuantidade.value = material.quantidade;
 
-inputNome.classList.add("modo-edicao");
-inputQuantidade.classList.add("modo-edicao");
+        inputNome.classList.add("modo-edicao");
+        inputQuantidade.classList.add("modo-edicao");
 
-idEdicao = id;
+        idEdicao = id;
+        btnCadastrar.textContent = "Atualizar Material";
 
-document.getElementById("btn-cadastrar").textContent = "Atualizar Material";
     } catch {
-alert("Não foi possível carregar os dados do material.");    }
+        mostrarErro("Não foi possível carregar o material.");
+    }
 }
 
 async function excluirMaterial(id) {
-    const confirmacao = confirm("Tem certeza que deseja excluir este material?");
+    if (!confirm("Tem certeza que deseja excluir?")) return;
 
-if (!confirmacao) {
-    return;
-}    
+    try {
+        const res = await fetch(`${API_URL}/${id}`, {
+            method: "DELETE"
+        });
 
-try {
-       const resposta = await fetch(`${API_URL}/${id}`, {
-    method: "DELETE"
-});
+        if (!res.ok) throw new Error();
 
-if (!resposta.ok) {
-    throw new Error();
-}
-
-atualizarLista();
+        atualizarLista();
 
     } catch {
-mostrarErro("Não foi possível excluir o material.");}
+        mostrarErro("Erro ao excluir material.");
+    }
+}
 
-async function baixarMaterial(id, nomeMaterial, estoqueAtual, botao)
+async function baixarMaterial(id, nomeMaterial, estoqueAtual, botao) {
     const linha = botao.closest("tr");
-const inputRetirada = linha.querySelector("#input-retirada");
-const quantidadeRetirada = Number(inputRetirada.value);
-const retiradaValida = validarRetirada(estoqueAtual, quantidadeRetirada);
+    const inputRetirada = linha.querySelector("#input-retirada");
+    const quantidadeRetirada = Number(inputRetirada.value);
 
-if (!retiradaValida) {
-        alert(
-            `Retirada inválida.\n\nEstoque atual: ${estoqueAtual}\nQuantidade informada: ${quantidadeRetirada}`
-        );
-        return;
+    if (!validarRetirada(estoqueAtual, quantidadeRetirada)) {
+        return mostrarErro("Retirada inválida.");
     }
 
     const novaQuantidade = estoqueAtual - quantidadeRetirada;
 
     try {
-       await fetch(`${API_URL}/${id}`, {
-    method: "PUT",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-        nome: nomeMaterial,
-        quantidade: novaQuantidade
-    })
-});
+        const res = await fetch(`${API_URL}/${id}`, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                nome: material.nome,
+                nome: nomeMaterial,
                 quantidade: novaQuantidade
             })
         });
 
-        carregarMateriais();
+        if (!res.ok) throw new Error();
+
+        atualizarLista();
 
     } catch {
-mostrarErro("Não foi possível atualizar o estoque.");    }
+        mostrarErro("Erro ao atualizar estoque.");
+    }
 }
-const btnLimpar = document.getElementById("btn-limpar");
 
 btnLimpar.addEventListener("click", () => {
     form.reset();
-    inputNome.classList.remove("input-erro");
-    inputQuantidade.classList.remove("input-erro");
+    inputNome.classList.remove("input-erro", "modo-edicao");
+    inputQuantidade.classList.remove("input-erro", "modo-edicao");
     idEdicao = null;
-
-    inputNome.classList.remove("modo-edicao");
-inputQuantidade.classList.remove("modo-edicao");
-
-    document.getElementById("btn-cadastrar").textContent = "Cadastrar Material";
+    btnCadastrar.textContent = "Cadastrar Material";
 });
-inputBusca.addEventListener("input", atualizarLista);
 
 inputNome.addEventListener("input", () => {
     inputNome.classList.remove("input-erro");
@@ -307,4 +251,7 @@ inputQuantidade.addEventListener("input", () => {
     inputQuantidade.classList.remove("input-erro");
 });
 
+inputBusca.addEventListener("input", () => {
+    debounceBusca(atualizarLista);
+});
 atualizarLista();
