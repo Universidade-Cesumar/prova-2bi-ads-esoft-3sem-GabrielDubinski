@@ -356,7 +356,10 @@ td:last-child button {
     background: #ff0000;
     color: #000;
 }
-
+.modo-edicao {
+    border: 2px solid #ff0000 !important;
+    box-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
+}
 }
 
 }

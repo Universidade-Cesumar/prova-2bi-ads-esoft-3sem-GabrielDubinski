@@ -201,14 +201,15 @@ if (!resposta.ok) {
 }
 
 const material = await resposta.json();
+inputNome.value = material.nome;
+inputQuantidade.value = material.quantidade;
 
-        inputNome.value = material.nome;
-        inputQuantidade.value = material.quantidade;
+inputNome.classList.add("modo-edicao");
+inputQuantidade.classList.add("modo-edicao");
 
-        idEdicao = id;
+idEdicao = id;
 
-        document.getElementById("btn-cadastrar").textContent = "Atualizar Material";
-
+document.getElementById("btn-cadastrar").textContent = "Atualizar Material";
     } catch {
 alert("Não foi possível carregar os dados do material.");    }
 }
