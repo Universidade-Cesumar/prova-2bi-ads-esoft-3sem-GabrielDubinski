@@ -105,20 +105,25 @@ h1 {
 }
 #btn-cadastrar {
     height: 55px;
-    min-width: 220px;
-    background: #d4af37;
-    color: #000;
-    border: none;
-    border-radius: 12px;
+    min-width: 230px;
+    background: #c40000;
+    color: #ffffff;
+    border: 1px solid #ff3333;
+    border-radius: 14px;
     font-weight: bold;
     font-size: 15px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all .3s ease;
 }
 
 #btn-cadastrar:hover {
-    background: #ffd700;
-    transform: translateY(-2px);
+    background: #ff0000;
+    transform: translateY(-3px);
+    box-shadow: 0 0 18px rgba(255, 0, 0, .35);
+}
+
+#btn-cadastrar:active {
+    transform: scale(.98);
 }
 
 h2 {
