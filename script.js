@@ -176,11 +176,15 @@ alert("Não foi possível carregar os dados do material.");    }
 
 async function excluirMaterial(id) {
     try {
-        await fetch(`${API_URL}/${id}`, {
-            method: "DELETE"
-        });
+       const resposta = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE"
+});
 
-        carregarMateriais();
+if (!resposta.ok) {
+    throw new Error();
+}
+
+carregarMateriais();
 
     } catch {
 alert("Não foi possível excluir o material.");    }
