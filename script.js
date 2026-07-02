@@ -9,6 +9,9 @@ const tbody = document.querySelector("#lista-materiais tbody");
 
 let idEdicao = null;
 
+function mostrarErro(mensagem) {
+    alert(mensagem);
+}
 function validarRetirada(estoqueAtual, quantidadeRetirada) {
 
    if (!Number.isInteger(quantidadeRetirada)) {
@@ -112,8 +115,7 @@ onclick="baixarMaterial('${material.id}', '${material.nome}', ${material.quantid
     tbody.innerHTML = "";
     totalItens.textContent = "0";
 
-    alert("Erro ao carregar materiais. Verifique sua conexão e tente novamente.");
-}
+mostrarErro("Erro ao carregar materiais. Verifique sua conexão e tente novamente.");}
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -187,7 +189,7 @@ setTimeout(() => {
 
 catch {
     btnCadastrar.disabled = false;
-    alert("Não foi possível salvar o material.");
+   mostrarErro("Não foi possível salvar o material.");
 }
 
 async function editarMaterial(id) {
@@ -230,8 +232,7 @@ if (!resposta.ok) {
 carregarMateriais();
 
     } catch {
-alert("Não foi possível excluir o material.");    }
-}
+mostrarErro("Não foi possível excluir o material.");}
 
 async function baixarMaterial(id, nomeMaterial, estoqueAtual, botao)
     const linha = botao.closest("tr");
@@ -272,8 +273,7 @@ if (!retiradaValida) {
         carregarMateriais();
 
     } catch {
-      alert("Não foi possível atualizar o estoque.");
-    }
+mostrarErro("Não foi possível atualizar o estoque.");    }
 }
 
 inputBusca.addEventListener("input", carregarMateriais);
