@@ -48,6 +48,14 @@ const materiaisFiltrados = materiais.filter(material =>
 
 materiaisFiltrados
             .forEach((material) => {
+
+                const linhaVazia = document.getElementById("linha-vazia");
+
+if (materiaisFiltrados.length === 0) {
+    linhaVazia.style.display = "table-row";
+} else {
+    linhaVazia.style.display = "none";
+}
 const tr = document.createElement("tr");
 const estoqueBaixo = Number(material.quantidade) < 10;
 
