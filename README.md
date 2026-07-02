@@ -1,160 +1,112 @@
-# Funcionalidades
+📦 Funcionalidades
+➕ Cadastro de Materiais
 
-## Cadastro de Materiais
+Você pode adicionar novos materiais informando o nome e a quantidade em estoque.
+Assim que o formulário é enviado, os dados são enviados para a API usando uma requisição POST, e ficam salvos no MockAPI.
 
-Permite cadastrar novos materiais informando o nome e a quantidade disponível em estoque. Os dados são enviados para a API através de uma requisição POST e armazenados no MockAPI.
+📋 Listagem de Materiais
 
----
+Quando a aplicação abre, ela busca automaticamente todos os materiais cadastrados na API com uma requisição GET e mostra tudo em uma tabela organizada.
 
-## Consulta de Materiais
+🔎 Pesquisa em Tempo Real
 
-Ao carregar a aplicação, uma requisição GET busca todos os materiais cadastrados na API e exibe as informações em uma tabela organizada.
+Existe uma barra de pesquisa que facilita encontrar qualquer material rapidamente.
 
----
+A busca funciona enquanto você digita, filtrando os resultados automaticamente pelo campo:
 
-## Pesquisa de Materiais
+input-busca
+📊 Painel de Controle
 
-O sistema possui uma barra de pesquisa que permite localizar materiais cadastrados de forma rápida e prática.
+O sistema mostra um resumo com a quantidade total de materiais cadastrados.
 
-A pesquisa é realizada em tempo real através do campo:
+Esse valor aparece no elemento:
 
-* input-busca
+total-itens
 
-Conforme o usuário digita, a tabela é atualizada automaticamente exibindo apenas os materiais que correspondem ao termo pesquisado.
+Ele é atualizado automaticamente sempre que um item é adicionado, editado ou removido.
 
----
+✏️ Edição de Materiais
 
-## Dashboard de Controle
+Qualquer material pode ser editado a qualquer momento.
 
-O sistema possui um painel de acompanhamento que exibe a quantidade total de materiais cadastrados.
+Quando isso acontece, o sistema envia uma requisição PUT atualizando os dados direto na API.
 
-O valor é apresentado através do elemento:
+📉 Baixa de Estoque
 
-* total-itens
+É possível registrar retiradas de materiais diretamente na tabela.
 
-Esse indicador é atualizado automaticamente sempre que um material é cadastrado, editado ou removido.
-
----
-
-## Edição de Materiais
-
-Os registros podem ser alterados a qualquer momento. Ao editar um material, o sistema realiza uma requisição PUT para atualizar os dados diretamente na API.
-
----
-
-## Baixa de Estoque
-
-O sistema permite registrar retiradas de materiais através da funcionalidade de baixa de estoque.
-
-Antes da atualização, é executada a função:
+Antes de atualizar o estoque, o sistema usa a função:
 
 validarRetirada(estoqueAtual, quantidadeRetirada)
 
-Essa validação impede que sejam realizadas operações inválidas, como:
+Ela impede erros como:
 
-* Retirada de valores negativos;
-* Retirada de quantidade igual a zero;
-* Retirada superior ao estoque disponível.
+retirada negativa
+retirada igual a zero
+retirada maior que o estoque
 
-Quando a operação é válida, o sistema calcula automaticamente o novo saldo e envia uma requisição PUT para atualizar o estoque na API.
+Se estiver tudo certo, o novo valor é calculado e atualizado na API com PUT.
 
----
+🗑️ Exclusão de Materiais
 
-## Exclusão de Materiais
+Os materiais podem ser removidos permanentemente pelo botão de exclusão.
 
-Materiais podem ser removidos permanentemente através do botão de exclusão.
+Isso é feito com uma requisição DELETE, e a lista é atualizada automaticamente depois.
 
-A remoção é realizada utilizando uma requisição DELETE para a API, atualizando automaticamente a tabela após a exclusão.
+⚠️ Controle de Estoque Baixo
 
----
+Para facilitar o controle, o sistema destaca automaticamente materiais com menos de 10 unidades.
 
-## Controle de Estoque Baixo
+Quando isso acontece, a linha recebe a classe:
 
-Para auxiliar no gerenciamento dos materiais, o sistema identifica automaticamente itens com estoque inferior a 10 unidades.
+estoque-critico
 
-Quando essa condição é encontrada, a linha correspondente recebe a classe:
+Isso ajuda a identificar rapidamente o que precisa ser reposto.
 
-* estoque-critico
+🔗 Integração com API
 
-Esse destaque visual permite identificar rapidamente materiais que necessitam de reposição.
+O projeto usa o MockAPI como banco de dados.
 
----
+As operações são:
 
-# Integração com API
+GET → buscar materiais
+POST → cadastrar novos materiais
+PUT → atualizar materiais e estoque
+DELETE → remover materiais
 
-A aplicação utiliza o MockAPI como serviço de armazenamento de dados.
+Tudo é feito usando Fetch API com JavaScript assíncrono.
 
-Operações implementadas:
+🧱 Estrutura do Sistema
 
-* GET: consulta dos materiais cadastrados;
-* POST: cadastro de novos materiais;
-* PUT: atualização de materiais e baixa de estoque;
-* DELETE: remoção de materiais.
+O projeto segue o padrão CRUD:
 
-Além das operações CRUD, a API também é utilizada para realizar as baixas de estoque após a validação da função validarRetirada(estoqueAtual, quantidadeRetirada), garantindo a integridade dos dados armazenados.
+Create → adicionar materiais
+Read → listar materiais
+Update → editar e dar baixa
+Delete → remover materiais
+🧪 Validação de Estoque
 
-Todas as operações são realizadas utilizando Fetch API e JavaScript assíncrono.
-
----
-
-# Tecnologias Utilizadas
-
-## HTML5
-
-Estrutura da aplicação e organização dos elementos da interface.
-
-## CSS3
-
-Responsável pela estilização da aplicação utilizando tema escuro com detalhes dourados e layout responsivo.
-
-## JavaScript
-
-Implementação das regras de negócio, manipulação do DOM e comunicação com a API.
-
-## Fetch API
-
-Utilizada para realizar as requisições HTTP entre a aplicação e o MockAPI.
-
-## MockAPI
-
-Responsável pelo armazenamento e gerenciamento dos dados utilizados pela aplicação.
-
----
-
-# Estrutura da Aplicação
-
-A aplicação segue o modelo CRUD completo:
-
-* Create (POST) - Cadastro de materiais;
-* Read (GET) - Consulta de materiais;
-* Update (PUT) - Edição e baixa de estoque;
-* Delete (DELETE) - Exclusão de materiais.
-
----
-
-# Validação de Estoque
-
-Para garantir a integridade dos dados foi implementada a função:
+Existe uma validação simples para evitar erros:
 
 validarRetirada(estoqueAtual, quantidadeRetirada)
 
-A função retorna:
+Ela garante que:
 
-* true quando a retirada é válida;
-* false quando a retirada é inválida.
+a retirada seja válida
+o estoque nunca fique negativo
+os dados permaneçam consistentes
+⚠️ Tratamento de Erros
 
-Essa validação impede inconsistências no estoque e garante que o saldo nunca fique negativo.
+Todas as requisições possuem proteção com try/catch.
 
----
+Isso garante que:
 
-# Tratamento de Erros
-
-As operações de comunicação com a API possuem tratamento de erros utilizando blocos try/catch.
-
-Dessa forma:
-
-* Falhas de conexão podem ser identificadas;
-* Erros da API são tratados adequadamente;
-* O usuário recebe mensagens informando quando ocorre algum problema durante as operações.
-
-Essa implementação aumenta a confiabilidade e a estabilidade da aplicação.
+falhas de conexão sejam tratadas
+erros da API não quebrem o sistema
+o usuário receba feedback quando algo der errado
+🛠️ Tecnologias Usadas
+HTML5 → estrutura da aplicação
+CSS3 → estilização e responsividade
+JavaScript → lógica e regras do sistema
+Fetch API → comunicação com a API
+MockAPI → armazenamento dos dados
