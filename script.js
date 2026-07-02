@@ -36,16 +36,17 @@ async function carregarMateriais() {
 
         const materiais = await resposta.json();
 
-        tbody.innerHTML = "";
+       tbody.innerHTML = "";
 
-        totalItens.textContent = materiais.length;
+const termoBusca = inputBusca.value.trim().toLowerCase();
 
-        const termoBusca = inputBusca.value.toLowerCase();
+totalItens.textContent = materiais.length;
 
-        materiais
-            .filter(material =>
-                material.nome.toLowerCase().includes(termoBusca)
-            )
+const materiaisFiltrados = materiais.filter(material =>
+    material.nome.toLowerCase().includes(termoBusca)
+);
+
+materiaisFiltrados
             .forEach((material) => {
 
                 const tr = document.createElement("tr");
