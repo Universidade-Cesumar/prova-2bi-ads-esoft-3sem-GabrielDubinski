@@ -86,22 +86,23 @@ h1 {
     width: 280px;
     height: 55px;
     padding: 15px;
-    background: #181818;
-    border: 1px solid #d4af37;
-    border-radius: 12px;
-    color: #ffd700;
+    background: #1a1a1a;
+    border: 1px solid #ff3333;
+    border-radius: 14px;
+    color: #ffffff;
     font-size: 15px;
+    transition: all .3s ease;
 }
 
 #form-cadastro input::placeholder {
-    color: #a88a2c;
+    color: #888;
 }
 
 #form-cadastro input:focus {
     outline: none;
-    border-color: #ffd700;
+    border-color: #ff0000;
+    box-shadow: 0 0 10px rgba(255, 0, 0, .35);
 }
-
 #btn-cadastrar {
     height: 55px;
     min-width: 220px;
