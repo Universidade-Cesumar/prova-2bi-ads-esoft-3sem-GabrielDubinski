@@ -1,18 +1,12 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Almoxarifado - Controle de Materiais</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
 <body>
 
-    <div class="container">
+    <main class="container">
 
+        <!-- Título -->
         <h1>📦 Controle de Almoxarifado</h1>
 
-        <div class="topo-dashboard">
+        <!-- Dashboard -->
+        <section class="topo-dashboard">
 
             <div class="filtros">
                 <input
@@ -29,8 +23,9 @@
                 </h3>
             </div>
 
-        </div>
+        </section>
 
+        <!-- Cadastro -->
         <form id="form-cadastro">
 
             <input
@@ -57,26 +52,30 @@
 
         </form>
 
-        <h2>📋 Lista de Materiais</h2>
+        <!-- Lista -->
+        <section>
 
-        <table id="lista-materiais">
+            <h2>📋 Lista de Materiais</h2>
 
-            <thead>
-                <tr>
-                    <th>Nome do Material</th>
-                    <th>Quantidade</th>
-                    <th>Retirada</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
+            <table id="lista-materiais">
 
-            <tbody></tbody>
+                <thead>
+                    <tr>
+                        <th>Nome do Material</th>
+                        <th>Quantidade</th>
+                        <th>Retirada</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
 
-        </table>
+                <tbody></tbody>
 
-    </div>
+            </table>
+
+        </section>
+
+    </main>
 
     <script src="script.js"></script>
 
 </body>
-</html>
