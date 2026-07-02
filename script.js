@@ -105,10 +105,25 @@ onclick="baixarMaterial('${material.id}', '${material.nome}', ${material.quantid
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const dados = {
-        nome: inputNome.value.trim(),
-        quantidade: Number(inputQuantidade.value)
-    };
+    const nome = inputNome.value.trim();
+const quantidade = Number(inputQuantidade.value);
+
+if (nome === "") {
+    alert("Informe o nome do material.");
+    inputNome.focus();
+    return;
+}
+
+if (isNaN(quantidade) || quantidade < 0) {
+    alert("Informe uma quantidade válida.");
+    inputQuantidade.focus();
+    return;
+}
+
+const dados = {
+    nome,
+    quantidade
+};
 
     try {
         if (idEdicao) {
