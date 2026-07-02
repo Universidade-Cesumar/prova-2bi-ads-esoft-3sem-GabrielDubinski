@@ -360,7 +360,17 @@ td:last-child button {
     border: 2px solid #ff0000 !important;
     box-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
 }
+
+#loading-row td {
+    text-align: center;
+    padding: 20px;
+    color: #ff0000;
+    font-weight: bold;
+    background: #111;
 }
+
+}
+
 
 }
 

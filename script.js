@@ -6,7 +6,9 @@ const inputQuantidade = document.getElementById("input-quantidade");
 const inputBusca = document.getElementById("input-busca");
 const totalItens = document.getElementById("total-itens");
 const tbody = document.querySelector("#lista-materiais tbody");
-
+const loadingRow = document.getElementById("loading-row");
+loadingRow.style.display = "table-row";
+tbody.style.display = "none";
 let idEdicao = null;
 
 
@@ -44,6 +46,8 @@ async function carregarMateriais() {
 
     tbody.style.opacity = "0.4";
     tbody.innerHTML = "";
+        loadingRow.style.display = "none";
+tbody.style.display = "table-row-group";
 
     tbody.style.opacity = "1";
 
@@ -293,7 +297,7 @@ inputQuantidade.classList.remove("modo-edicao");
 
     document.getElementById("btn-cadastrar").textContent = "Cadastrar Material";
 });
-inputBusca.addEventListener("input", carregarMateriais);
+inputBusca.addEventListener("input", atualizarLista);
 
 inputNome.addEventListener("input", () => {
     inputNome.classList.remove("input-erro");
@@ -303,4 +307,4 @@ inputQuantidade.addEventListener("input", () => {
     inputQuantidade.classList.remove("input-erro");
 });
 
-carregarMateriais();
+atualizarLista();
