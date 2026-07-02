@@ -145,11 +145,17 @@ table {
     border-spacing: 0 10px;
 }
 
+table {
+    table-layout: fixed;
+}
+
 thead th {
-    background: #d4af37;
-    color: #000;
+    background: #990000;
+    color: #ffffff;
     padding: 18px;
-    font-weight: bold;
+    font-weight: 600;
+    letter-spacing: .5px;
+    border-bottom: 2px solid #ff3333;
 }
 
 thead th:first-child {
@@ -161,10 +167,11 @@ thead th:last-child {
 }
 
 tbody td {
-    background: #1b1b1b;
+    background: #181818;
     padding: 18px;
     text-align: center;
-    color: #d4af37;
+    color: #f2f2f2;
+    transition: .3s;
 }
 
 tbody td:first-child {
@@ -176,7 +183,8 @@ tbody td:last-child {
 }
 
 tbody tr:hover td {
-    background: #242424;
+    background: #2b2b2b;
+    color: #ff4d4d;
 }
 
 #input-retirada {
