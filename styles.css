@@ -208,45 +208,52 @@ td:last-child {
 }
 
 .btn-baixar {
-    background: #d4af37;
-    color: #000;
+    background: #008c4a;
+    color: #fff;
     border: none;
-    padding: 10px 15px;
-    border-radius: 8px;
-    font-weight: bold;
+    padding: 10px 16px;
+    border-radius: 10px;
     cursor: pointer;
+    font-weight: bold;
+    transition: all .3s ease;
 }
 
 .btn-baixar:hover {
-    background: #ffd700;
+    background: #00a85a;
+    transform: translateY(-2px);
 }
 
 .btn-excluir {
-    background: #b71c1c;
+    background: #c62828;
     color: white;
     border: none;
-    padding: 10px 15px;
-    border-radius: 8px;
+    padding: 10px 16px;
+    border-radius: 10px;
     cursor: pointer;
+    font-weight: bold;
+    transition: all .3s ease;
 }
 
 .btn-excluir:hover {
-    background: #d32f2f;
+    background: #ef5350;
+    transform: translateY(-2px);
 }
 
-button:not(.btn-baixar):not(.btn-excluir) {
-    background: #2d2d2d;
-    color: #ffd700;
-    border: 1px solid #d4af37;
-    padding: 10px 15px;
-    border-radius: 8px;
+.btn-editar {
+    background: #424242;
+    color: #ffffff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 10px;
     cursor: pointer;
+    font-weight: bold;
+    transition: all .3s ease;
 }
 
-button:not(.btn-baixar):not(.btn-excluir):hover {
-    background: #3a3a3a;
+.btn-editar:hover {
+    background: #616161;
+    transform: translateY(-2px);
 }
-
 .estoque-critico td {
     background: rgba(255, 0, 0, 0.15) !important;
     color: #ff6b6b;
