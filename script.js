@@ -11,10 +11,9 @@ let idEdicao = null;
 
 function validarRetirada(estoqueAtual, quantidadeRetirada) {
 
-    if (isNaN(quantidadeRetirada)) {
-        return false;
-    }
-
+   if (!Number.isInteger(quantidadeRetirada)) {
+    return false;
+}
     if (quantidadeRetirada <= 0) {
         return false;
     }
@@ -184,6 +183,7 @@ setTimeout(() => {
     const inputs = document.querySelectorAll("#input-retirada");
     inputs.forEach(input => input.value = "");
 }, 50);
+
 catch {
     btnCadastrar.disabled = false;
     alert("Não foi possível salvar o material.");
