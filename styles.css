@@ -376,6 +376,13 @@ td:last-child button {
     background: #111;
 }
 
+.highlight {
+    background: red;
+    color: black;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
 }
 
 

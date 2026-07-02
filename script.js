@@ -12,6 +12,16 @@ const btnCadastrar = document.getElementById("btn-cadastrar");
 
 let idEdicao = null;
 
+
+
+function destacarTexto(texto, termo) {
+    if (!termo) return texto;
+
+    const regex = new RegExp(`(${termo})`, "gi");
+
+    return texto.replace(regex, `<span class="highlight">$1</span>`);
+}
+
 function mostrarErro(mensagem) {
     alert(mensagem);
 }
