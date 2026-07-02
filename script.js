@@ -74,9 +74,12 @@ async function carregarMateriais() {
                         </button>
 
                         <button
-                            type="button"
-                            onclick="editarMaterial('${material.id}')"
-                        >
+    type="button"
+    class="btn-editar"
+    onclick="editarMaterial('${material.id}')"
+>
+    ✏️ Editar
+</button>
                             Editar
                         </button>
 
